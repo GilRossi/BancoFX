@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private double saldo = 0.0; // Variável para armazenar o saldo
+    private OperacoesBancarias operacoesBancarias = new OperacoesBancarias(0.0); // Inicializa com saldo zero
 
     @Override
     public void start(Stage primaryStage) {
@@ -76,7 +76,7 @@ public class Main extends Application {
 
             // Aqui você pode adicionar a lógica para salvar os dados
             System.out.println("Titular: " + titular);
-            System.out.println("Saldo: " + saldo);
+            System.out.println("Saldo: " + operacoesBancarias.getSaldo());
             System.out.println("Conta: " + conta);
             System.out.println("Agência: " + agencia);
         });
@@ -85,13 +85,8 @@ public class Main extends Application {
         btnSaque.setOnAction(e -> {
             try {
                 double valor = Double.parseDouble(txtValor.getText());
-                if (valor > 0 && valor <= saldo) {
-                    saldo -= valor; // Subtrai o valor do saldo
-                    txtSaldo.setText(String.format("%.2f", saldo)); // Atualiza o campo de saldo
-                    System.out.println("Saque de " + valor + " realizado. Novo saldo: " + saldo);
-                } else {
-                    System.out.println("Valor de saque inválido ou saldo insuficiente.");
-                }
+                operacoesBancarias.sacar(valor);
+                txtSaldo.setText(String.format("%.2f", operacoesBancarias.getSaldo())); // Atualiza o campo de saldo
             } catch (NumberFormatException ex) {
                 System.out.println("Valor inválido para saque.");
             }
@@ -101,13 +96,8 @@ public class Main extends Application {
         btnDeposito.setOnAction(e -> {
             try {
                 double valor = Double.parseDouble(txtValor.getText());
-                if (valor > 0) {
-                    saldo += valor; // Adiciona o valor ao saldo
-                    txtSaldo.setText(String.format("%.2f", saldo)); // Atualiza o campo de saldo
-                    System.out.println("Depósito de " + valor + " realizado. Novo saldo: " + saldo);
-                } else {
-                    System.out.println("Valor de depósito inválido.");
-                }
+                operacoesBancarias.depositar(valor);
+                txtSaldo.setText(String.format("%.2f", operacoesBancarias.getSaldo())); // Atualiza o campo de saldo
             } catch (NumberFormatException ex) {
                 System.out.println("Valor inválido para depósito.");
             }
